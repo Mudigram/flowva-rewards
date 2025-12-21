@@ -48,7 +48,7 @@ export default function RewardsFilter({
                     onClick={() => onChange(filter.value)}
                     className={`
                         px-4 py-3 text-sm transition-colors duration-300 rounded-tr-lg rounded-tl-lg
-                        ${activeFilter === filter.value ? 'text-purple-800 font-semibold bg-purple-100' : 'text-gray-500 hover:text-purple-700'}
+                        ${activeFilter === filter.value ? 'text-purple-800 font-semibold bg-purple-100' : 'text-gray-500 hover:text-purple-700 hover:bg-purple-100'}
                     `}
                 >
                     {filter.label}

@@ -88,7 +88,7 @@ export default function RewardsPage() {
 
     return (
         <div className="w-full">
-            <header className="sticky top-8 bg-gray-50 z-10 px-6 py-2 flex flex-col md:flex-row md:items-center justify-between gap-4 mt-8">
+            <header className="sticky top-6 bg-gray-50 z-10 px-6 py-2 flex flex-col md:flex-row md:items-center justify-between gap-4 mt-8">
                 <div>
                     <h1 className="text-2xl text-gray-900">Rewards Hub</h1>
                     <p className="text-gray-600">Earn points, unlock rewards, and celebrate your progress!</p>
@@ -113,6 +113,9 @@ export default function RewardsPage() {
                 <div key={tab} className="animate-slide-in">
                     {tab === 'redeem' ? (
                         <>
+                            <div className="text-xl font-semibold mb-2 text-gray-900 border-r border-gray-20">
+                                Redeem Your Points
+                            </div>
                             <RewardsFilter
                                 activeFilter={filter}
                                 onChange={setFilter}

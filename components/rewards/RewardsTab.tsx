@@ -36,7 +36,7 @@ export default function RewardsTabs({ activeTab, onChange }: Props) {
                     onClick={() => onChange(tab.value)}
                     className={`
                         px-6 py-3 text-sm font-semibold transition-colors duration-300
-                        ${activeTab === tab.value ? 'text-purple-800 bg-purple-100 rounded-tr-lg rounded-tl-lg' : 'text-gray-500 hover:text-purple-700'}
+                        ${activeTab === tab.value ? 'text-purple-800 bg-purple-100 rounded-tr-lg rounded-tl-lg' : 'text-gray-500 hover:text-purple-700 hover:bg-purple-100 rounded-tr-lg rounded-tl-lg'}
                     `}
                     role="tab"
                     aria-selected={activeTab === tab.value}
