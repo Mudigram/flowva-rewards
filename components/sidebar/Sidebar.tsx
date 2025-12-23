@@ -1,5 +1,5 @@
 'use client'
-import { Gem, Home, Compass, Library, PackageOpen, CreditCard, Settings } from 'lucide-react'
+import { Gem, Home, Compass, Library, PackageOpen, CreditCard, Settings, X } from 'lucide-react'
 import UserInfo from './UserInfo'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -14,18 +14,33 @@ const navItems = [
     { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
-export default function Sidebar() {
+type Props = {
+    onClose?: () => void
+}
+
+export default function Sidebar({ onClose }: Props) {
     const pathname = usePathname()
 
     return (
-        <aside className="w-64 min-w-64 bg-white shadow-lg border-r border-gray-200 p-6 flex flex-col h-screen sticky top-0">
-            {/* Logo */}
-            <div className="text-xl font-bold text-purple-700 mb-10">
-                Flowva
+        <aside className="w-64 min-w-64 bg-white shadow-lg border-r border-gray-200 p-6 flex flex-col h-full lg:h-screen lg:sticky lg:top-0">
+            {/* Logo & Close Button */}
+            <div className="flex items-center justify-between mb-10">
+                <div className="text-xl font-bold text-purple-700">
+                    Flowva
+                </div>
+                {onClose && (
+                    <button
+                        onClick={onClose}
+                        className="lg:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                        aria-label="Close Menu"
+                    >
+                        <X size={20} />
+                    </button>
+                )}
             </div>
 
             {/* Nav */}
-            <nav className="space-y-2">
+            <nav className="space-y-2 flex-1">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href
                     const isPlaceHolder = item.href !== '/rewards'
@@ -48,14 +63,14 @@ export default function Sidebar() {
                             {content}
                         </div>
                     ) : (
-                        <Link key={item.name} href={item.href}>
+                        <Link key={item.name} href={item.href} onClick={onClose}>
                             {content}
                         </Link>
                     )
                 })}
             </nav>
 
-            <div className="mt-auto border-t border-gray-500 pt-4">
+            <div className="mt-auto border-t border-gray-100 pt-4">
                 <UserInfo />
             </div>
         </aside>

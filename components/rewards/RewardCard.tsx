@@ -33,15 +33,15 @@ export default function RewardCard({
     return (
         <div
             className={`
-        border border-purple-100
+        border border-purple-200
         rounded-xl
         p-4
         flex flex-col
         items-center
         text-center
         transition-all duration-500 ease-in-out
-        hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] bg-white
-        ${isLocked ? 'cursor-not-allowed opacity-75' : 'hover:border-purple-300'}
+        hover:-translate-y-2 hover:shadow-md hover:scale-[1] bg-white
+        ${isLocked ? 'cursor-not-allowed opacity-75' : 'hover:border-purple-100'}
       `}
         >
             <div className="text-2xl mb-4 bg-purple-100 rounded-xl p-2">{emoji}</div>

@@ -2,12 +2,17 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Bell } from 'lucide-react'
 import { useRewards } from '@/hooks/useRewards'
 import RewardsFilter from '@/components/rewards/RewardsFilter'
 import RewardsGrid from '@/components/rewards/RewardsGrid'
 import { useAuth } from '@/hooks/useAuth'
-import { useUserPoints } from '@/hooks/useUserPoints'
+import { useUserRewards } from '@/hooks/useUserRewards'
 import RewardsTabs from '@/components/rewards/RewardsTab'
+import RewardsJourney from '@/components/earn/RewardsJourney'
+import EarnMorePoints from '@/components/earn/EarnMorePoints'
+import ReferAndEarn from '@/components/earn/ReferAndEarn'
+import { performRewardAction } from '@/lib/rewards'
 
 type Filter = 'all' | 'unlocked' | 'locked' | 'coming_soon'
 type RewardsTab = 'redeem' | 'earn'
@@ -15,10 +20,21 @@ type RewardsTab = 'redeem' | 'earn'
 export default function RewardsPage() {
     const { user, loading: authLoading } = useAuth()
     const { rewards, loading, error } = useRewards()
-    const { points: userPoints, loading: loadingPoints, error: pointsError } = useUserPoints()
+    const { rewardsData, loading: loadingPoints, error: pointsError, refresh: refreshRewards } = useUserRewards()
+    const userPoints = rewardsData?.total_points ?? 0
     const [filter, setFilter] = useState<Filter>('all')
     const [tab, setTab] = useState<RewardsTab>('redeem')
     const router = useRouter()
+
+    const handleShareStack = async () => {
+        if (!user) return
+        const result = await performRewardAction(user.id, 'share_stack', 25)
+        if (result.success) {
+            await refreshRewards()
+        } else {
+            alert(result.error)
+        }
+    }
 
     if (authLoading || loading || loadingPoints) {
         return (
@@ -88,19 +104,35 @@ export default function RewardsPage() {
 
     return (
         <div className="w-full">
-            <header className="sticky top-6 bg-gray-50 z-10 px-6 py-2 flex flex-col md:flex-row md:items-center justify-between gap-4 mt-8">
-                <div>
-                    <h1 className="text-2xl text-gray-900">Rewards Hub</h1>
+            <header className="sticky top-0 bg-gray-50 z-10 px-6 py-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="hidden lg:block">
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl text-gray-900">Rewards Hub</h1>
+                        <div className="relative p-2 bg-white rounded-xl shadow-sm border border-gray-100 md:hidden">
+                            <Bell className="w-6 h-6 text-gray-400" />
+                            <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></div>
+                        </div>
+                    </div>
                     <p className="text-gray-600">Earn points, unlock rewards, and celebrate your progress!</p>
                 </div>
 
+                {/* Mobile version of summary text */}
+                <div className="lg:hidden">
+                    <p className="text-gray-500 text-sm">Earn points, unlock rewards, and celebrate your progress!</p>
+                </div>
 
+                <div className="hidden lg:flex items-center gap-4">
+                    <div className="bg-purple-600 text-white rounded-2xl px-6 py-4 shadow-lg flex items-center gap-4">
+                        <div className="bg-purple-500/50 p-2 rounded-full text-2xl">⭐</div>
+                        <div>
+                            <p className="text-purple-100 text-xs uppercase tracking-wider font-semibold">Your Balance</p>
+                            <p className="text-2xl font-bold">{userPoints.toLocaleString()} Points</p>
+                        </div>
+                    </div>
 
-                <div className="bg-purple-600 text-white rounded-2xl px-6 py-4 shadow-lg flex items-center gap-4">
-                    <div className="bg-purple-500/50 p-2 rounded-full text-2xl">⭐</div>
-                    <div>
-                        <p className="text-purple-100 text-xs uppercase tracking-wider font-semibold">Your Balance</p>
-                        <p className="text-2xl font-bold">{userPoints.toLocaleString()} Points</p>
+                    <div className="relative p-3 bg-white rounded-full shadow-sm border border-gray-100 hidden md:block">
+                        <Bell className="w-6 h-6 text-gray-400" />
+                        <div className="absolute top-3 right-3 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></div>
                     </div>
                 </div>
             </header>
@@ -113,7 +145,7 @@ export default function RewardsPage() {
                 <div key={tab} className="animate-slide-in">
                     {tab === 'redeem' ? (
                         <>
-                            <div className="text-xl font-semibold mb-2 text-gray-900 border-r border-gray-20">
+                            <div className="text-xl font-semibold mb-2 text-gray-900 border-l-4 border-purple-600 pl-4">
                                 Redeem Your Points
                             </div>
                             <RewardsFilter
@@ -128,16 +160,10 @@ export default function RewardsPage() {
                             />
                         </>
                     ) : (
-                        <div className="bg-white border border-dashed border-purple-200 rounded-2xl p-20 text-center">
-                            <div className="text-5xl mb-6">🚀</div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Earn Points Coming Soon</h2>
-                            <p className="text-gray-600 max-w-md mx-auto">
-                                We're building exciting ways for you to earn more points!
-                                Complete missions, reach milestones, and level up your Flowva experience.
-                            </p>
-                            <button className="mt-8 px-6 py-2 bg-purple-100 text-purple-700 rounded-full font-medium hover:bg-purple-200 transition-colors">
-                                Notify Me
-                            </button>
+                        <div className="animate-slide-in">
+                            <RewardsJourney rewardsData={rewardsData} onRefresh={refreshRewards} />
+                            <EarnMorePoints onShareStack={handleShareStack} />
+                            <ReferAndEarn referralCode={rewardsData?.referral_code} />
                         </div>
                     )}
                 </div>

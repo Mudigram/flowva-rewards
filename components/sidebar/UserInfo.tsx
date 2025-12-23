@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { useUser } from '@/hooks/useUser'
 
@@ -14,6 +15,7 @@ export default function UserInfo() {
     return (
         <div className="flex items-center gap-3 p-3">
             {/* Avatar */}
+
             <div className="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center font-semibold text-purple-800">
                 {user.email?.[0]?.toUpperCase()}
             </div>

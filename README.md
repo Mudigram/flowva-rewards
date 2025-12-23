@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flowva Rewards Hub Technical Assessment
 
-## Getting Started
+A high-performance, premium-designed Rewards Hub built with **Next.js 14**, **Tailwind CSS**, and **Supabase**. This project recreates the core "Earn" and "Redeem" features of the Flowva platform with real-time data persistence and a mobile-first approach.
 
-First, run the development server:
+## 🚀 Live Demo
+**[Insert Your Live URL Here]**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 💎 Rewards Engine
+- **Dynamic Points Balance**: Real-time points tracking fetched directly from Supabase.
+- **Daily Streak System**: 
+  - Automated check-in logic that rewards consistency.
+  - Streak protection: Increments if claimed within 48 hours, resets otherwise.
+- **Engagement Actions**: 
+  - One-time claimable rewards for "Tool Highlight" and "Social Sharing".
+  - Backend validation to prevent duplicate claims.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🔗 Scalable Referrals
+- **Personalized Links**: Each user gets a unique referral code generated on signup.
+- **One-Click Sharing**: Horizontal social sharing bar with dynamic link generation.
 
-## Learn More
+### 📱 Premium UX/UI
+- **Horizontal Filters**: Horizontally scrollable filter bar with a custom `scrollbar-hide` utility.
+- **Glassmorphic Auth**: Sleek, high-converting Login and Signup pages.
+- **Full Responsiveness**: Optimized for everything from iPhone SE to 4K displays.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
+- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Backend & Auth**: Supabase
+- **Icons**: Lucide React
+- **Animations**: Tailwind Keyframes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ⚙️ Local Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repository**
+   ```bash
+   git clone [your-repo-url]
+   cd flowva-rewards
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**
+   Create a `.env.local` file in the root:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Database Setup**
+   Run the SQL found in [`lib/supabase/schema.sql`](./lib/supabase/schema.sql) in your Supabase SQL Editor. This will:
+   - Extend the `profiles` table.
+   - Create `reward_actions` and `referrals` tables.
+   - Set up RLS (Row Level Security) policies.
+
+5. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🧪 Test Credentials
+If you'd like to skip account creation, you can use the following test account:
+- **Email**: `test@flowva.com`
+- **Password**: `flowva123`
+
+---
+
+## 🧠 Assumptions & Trade-offs
+- **Profile Creation**: For simplicity in this assessment, I implemented client-side profile initialization in the Signup flow. In a production environment, I would use a PostgreSQL trigger in Supabase to handle this server-side for better data integrity.
+- **Streak Calculation**: I assumed a "daily" streak is valid if the last claim was > 24h ago but < 48h ago.
+- **Static vs Dynamic**: Hardcoded static marketing content (like tool descriptions) to optimize load times, while keeping all user-specific values and states fully dynamic.
+
+---
+
+## 🏆 Assessment Requirements Met
+- ✅ **Authentication**: Handled directly via Supabase Auth.
+- ✅ **Database**: Real use of relational tables, foreign keys, and RLS.
+- ✅ **UI/UX**: Recreated with pixel perfection and premium aesthetic.
+- ✅ **Error Handling**: Full handling of loading, empty, and error states.
